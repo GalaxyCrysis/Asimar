@@ -4,15 +4,26 @@ package Data_Update;
  * Created by Dominik on 25.10.2016.
  */
 import com.mysql.jdbc.jdbc2.optional.MysqlDataSource;
+import org.apache.hadoop.fs.FSDataOutputStream;
+import org.apache.hadoop.fs.FileStatus;
+import org.apache.hadoop.fs.Path;
 import org.apache.kafka.clients.producer.KafkaProducer;
 import org.apache.kafka.clients.producer.ProducerRecord;
 
+import java.io.FileOutputStream;
+import java.io.OutputStream;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.Properties;
+import java.io.IOException;
+import java.net.URI;
+import java.net.URISyntaxException;
+
+import org.apache.hadoop.conf.Configuration;
+import org.apache.hadoop.fs.FileSystem;
 
 public class Updater {
 
@@ -58,7 +69,7 @@ public class Updater {
     }
 
 
-    public static void main(String[] args){
+    public static void main(String[] args)throws Exception{
         //kafka inforamtion
         String topic = "Asimar";
 
@@ -89,6 +100,33 @@ public class Updater {
             producer.send(new ProducerRecord<String,String>(topic,Integer.toString(i),data.get(i).toString()));
         }
         producer.close();
+
+        //connect to hdfs file
+        URI uri = URI.create("hdfs://localhost:9000/user/dominik/Asimar/data.txt");
+        Configuration config = new Configuration();
+        FileSystem file = FileSystem.get(uri,config);
+        //init outputstream
+        FSDataOutputStream outputStream;
+        if(file.getScheme().equals("file")){
+            file.mkdirs(new Path(uri).getParent());
+            outputStream = new FSDataOutputStream(new FileOutputStream(new Path(uri).toString()),null);
+        }else {
+            outputStream = file.create(new Path(uri));
+        }
+        for(int i = 0; i < data.size(); i++){
+            //write data into the hdfs file
+            String newLine = data.get(i)+"\n";
+            outputStream.write(newLine.getBytes());
+            outputStream.flush();
+            outputStream.hsync();
+        }
+        outputStream.close();
+        file.close();
+
+
+
+
+
 
 
     }
