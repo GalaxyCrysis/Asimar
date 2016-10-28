@@ -89,7 +89,7 @@ public class Updater {
         props.put("retries",0);
         //buffer
         props.put("batch.size",16384);
-        //we reduce the number of requests less than 0
+        //we reduce the number of requests to 1
         props.put("linger.ms",1);
         //total memory
         props.put("buffer.memory",33554421);
