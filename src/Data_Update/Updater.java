@@ -53,10 +53,11 @@ public class Updater {
             connection = dataSource.getConnection(userID,password);
             statement = connection.createStatement();
             //execute SQL query and get the data
-            ResultSet result = statement.executeQuery("SELECT articleNr,gender,age FROM sold_articles");
+            ResultSet result = statement.executeQuery("SELECT articleNr,gender,age,zip FROM sold_articles");
             //add data to the list
             while (result.next()){
-                String data = result.getString("articleNr") + " " + result.getString("gender") + " " + result.getString("age");
+                String data = result.getString("articleNr") + " " + result.getString("gender") + " " + result.getString("age")
+                        + " " + result.getString("zip");
                 list.add(data);
             }
             result.close();
@@ -69,6 +70,8 @@ public class Updater {
     }
 
 
+    //we save the data into hdfs file and kafka for real time processing since the map reduce job takes longer and
+    //wanna have real time access to our data for analyzing
     public static void main(String[] args)throws Exception{
         //kafka inforamtion
         String topic = "Asimar";
@@ -95,11 +98,6 @@ public class Updater {
 
         //init kafka producer
         KafkaProducer <String,String> producer = new KafkaProducer<>(props);
-        //send messages to the brokers
-        for(int i=0; i < data.size(); i++){
-            producer.send(new ProducerRecord<String,String>(topic,Integer.toString(i),data.get(i).toString()));
-        }
-        producer.close();
 
         //connect to hdfs file
         URI uri = URI.create("hdfs://localhost:9000/user/dominik/Asimar/data.txt");
@@ -113,13 +111,19 @@ public class Updater {
         }else {
             outputStream = file.create(new Path(uri));
         }
-        for(int i = 0; i < data.size(); i++){
+
+        for(int i=0; i < data.size(); i++){
+            //send messages to the brokers
+            producer.send(new ProducerRecord<String,String>(topic,Integer.toString(i),data.get(i).toString()));
+
             //write data into the hdfs file
             String newLine = data.get(i)+"\n";
             outputStream.write(newLine.getBytes());
             outputStream.flush();
             outputStream.hsync();
         }
+
+        producer.close();
         outputStream.close();
         file.close();
 

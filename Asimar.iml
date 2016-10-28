@@ -10,5 +10,6 @@
     <orderEntry type="library" name="mysql-connector-java-5.1.38-bin" level="project" />
     <orderEntry type="library" name="libs" level="project" />
     <orderEntry type="library" name="hadoop-common-2.7.2" level="project" />
+    <orderEntry type="library" name="lib" level="project" />
   </component>
 </module>
