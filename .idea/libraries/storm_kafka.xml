@@ -1,0 +1,17 @@
+<component name="libraryTable">
+  <library name="storm-kafka">
+    <CLASSES>
+      <root url="file://C:/storm/external/storm-kafka" />
+      <root url="file://C:/storm/external/storm-kafka-client" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES>
+      <root url="file://C:/storm/external/storm-kafka" />
+      <root url="file://C:/storm/external/storm-kafka-client" />
+    </SOURCES>
+    <jarDirectory url="file://C:/storm/external/storm-kafka" recursive="false" />
+    <jarDirectory url="file://C:/storm/external/storm-kafka-client" recursive="false" />
+    <jarDirectory url="file://C:/storm/external/storm-kafka" recursive="false" type="SOURCES" />
+    <jarDirectory url="file://C:/storm/external/storm-kafka-client" recursive="false" type="SOURCES" />
+  </library>
+</component>
