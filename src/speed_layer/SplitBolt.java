@@ -22,7 +22,7 @@ public class SplitBolt implements IRichBolt {
 
     }
 
-    //we split the string into the data we nees for futher analysis
+    //we split the string into the data we need for further analysis
     @Override
     public void execute(Tuple tuple) {
         String sentence = tuple.getString(0);

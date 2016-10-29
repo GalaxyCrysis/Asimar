@@ -35,6 +35,7 @@ public class KafkaStormConfig {
         builder.setSpout("kafka-spout",new KafkaSpout(kafkaSpoutConfig));
         builder.setBolt("split-bolt",new SplitBolt()).shuffleGrouping("kafka-spout");
         builder.setBolt("process-bolt",new processBolt()).shuffleGrouping("split-bolt");
+        builder.setBolt("cassandra-bolt",new CassandraBolt()).shuffleGrouping("process-bolt");
 
         LocalCluster cluster = new LocalCluster();
         cluster.submitTopology("Asimar",config,builder.createTopology());
