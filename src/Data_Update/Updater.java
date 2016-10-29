@@ -103,7 +103,7 @@ public class Updater {
         KafkaProducer <String,String> producer = new KafkaProducer<>(props);
 
         //connect to hdfs file
-        URI uri = URI.create("hdfs://localhost:9000/user/dominik/Asimar/data.txt");
+        URI uri = URI.create("hdfs://localhost:9000/user/dominik/Asimar/new_data.txt");
         Configuration config = new Configuration();
         config.addResource("/HADOOP_HOME/conf/core-site.xml");
         config.addResource("/HADOOP_HOME/conf/hdfs-site.xml");

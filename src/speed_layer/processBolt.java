@@ -25,7 +25,7 @@ public class processBolt implements IRichBolt {
     public void execute(Tuple tuple) {
         //process the age: If the customer is a female, we return 1, if male we return 0
         Integer gender;
-        if(tuple.getString(2).equals("female")){
+        if(tuple.getString(1).equals("female")){
             gender = 1;
         }else {
             gender = 2;
@@ -33,7 +33,7 @@ public class processBolt implements IRichBolt {
 
         //now process the articleNr: For example if the string contains a ED it means it is a electrical device, so
         //we give the number 3
-        String articleNr = tuple.getString(1);
+        String articleNr = tuple.getString(0);
         Integer article = null;
 
         if(articleNr.contains("EE")){
@@ -71,11 +71,10 @@ public class processBolt implements IRichBolt {
             //sport article
             article = 11;
         }
-        String customer = tuple.getString(0);
-        Integer age = Integer.parseInt(tuple.getString(3));
-        Integer zip = Integer.parseInt(tuple.getString(4));
+        Integer age = Integer.parseInt(tuple.getString(2));
+        Integer zip = Integer.parseInt(tuple.getString(3));
         //emit the values
-        collector.emit(new Values(customer,article,gender,age,zip));
+        collector.emit(new Values(article,gender,age,zip));
         collector.ack(tuple);
 
     }
@@ -85,7 +84,7 @@ public class processBolt implements IRichBolt {
 
     @Override
     public void declareOutputFields(OutputFieldsDeclarer outputFieldsDeclarer) {
-        outputFieldsDeclarer.declare(new Fields("customer","article","gender","age","zip"));
+        outputFieldsDeclarer.declare(new Fields("article","gender","age","zip"));
     }
 
     @Override

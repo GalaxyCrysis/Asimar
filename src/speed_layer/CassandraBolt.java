@@ -24,11 +24,10 @@ public class CassandraBolt implements IRichBolt {
     public void execute(Tuple tuple) {
 
         //get the data from the tuple
-        String customer = tuple.getString(0);
-        Integer articleNr = Integer.parseInt(tuple.getString(1));
-        Integer gender = Integer.parseInt(tuple.getString(2));
-        Integer age = Integer.parseInt(tuple.getString(3));
-        Integer zip = Integer.parseInt(tuple.getString(4));
+        Integer articleNr = Integer.parseInt(tuple.getString(0));
+        Integer gender = Integer.parseInt(tuple.getString(1));
+        Integer age = Integer.parseInt(tuple.getString(2));
+        Integer zip = Integer.parseInt(tuple.getString(3));
 
 
         //create cassandra cluster
@@ -51,11 +50,11 @@ public class CassandraBolt implements IRichBolt {
 
 
         //create prepared statement
-        PreparedStatement statement = session.prepare("INSERT INTO data (customer,articleNr,gender,age,zip) " +
-                "VALUES(?,?,?,?,?)");
+        PreparedStatement statement = session.prepare("INSERT INTO data (articleNr,gender,age,zip) " +
+                "VALUES(?,?,?,?)");
 
         //now init the new data
-        session.execute(statement.bind(customer,articleNr,gender,age,zip));
+        session.execute(statement.bind(articleNr,gender,age,zip));
 
         session.close();
         cluster.close();
