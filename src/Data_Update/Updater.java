@@ -105,6 +105,8 @@ public class Updater {
         //connect to hdfs file
         URI uri = URI.create("hdfs://localhost:9000/user/dominik/Asimar/data.txt");
         Configuration config = new Configuration();
+        config.addResource("/HADOOP_HOME/conf/core-site.xml");
+        config.addResource("/HADOOP_HOME/conf/hdfs-site.xml");
         FileSystem file = FileSystem.get(uri,config);
 
         //init outputstream
@@ -122,7 +124,7 @@ public class Updater {
 
             //write data into the hdfs file
             String newLine = data.get(i)+"\n";
-            outputStream.write(newLine.getBytes());
+            outputStream.writeUTF(newLine);
             outputStream.flush();
             outputStream.hsync();
         }

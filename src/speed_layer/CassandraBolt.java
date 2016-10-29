@@ -14,6 +14,7 @@ import java.util.Map;
  */
 public class CassandraBolt implements IRichBolt {
     OutputCollector collector;
+    boolean deleted = false;
     @Override
     public void prepare(Map map, TopologyContext topologyContext, OutputCollector outputCollector) {
         collector = outputCollector;
@@ -33,11 +34,21 @@ public class CassandraBolt implements IRichBolt {
         //create cassandra cluster
         Cluster cluster = Cluster.builder().addContactPoint("localhost:2221").build();
         //connect to database
-        Session session = cluster.connect("Asimar");
+        Session session = null;
+        if (gender == 1){
+            session = cluster.connect("women");
+        }else {
+            session = cluster.connect("men");
+        }
+
 
         //first we delete all data since the data are already on the batch layer
-        // and available on through the serving layer
-        session.execute("DELETE * FROM data");
+        // and available  through the serving layer
+        if(!deleted){
+            session.execute("DELETE * FROM data");
+            deleted = true;
+        }
+
 
         //create prepared statement
         PreparedStatement statement = session.prepare("INSERT INTO data (customer,articleNr,gender,age,zip) " +
