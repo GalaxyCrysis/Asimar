@@ -27,7 +27,7 @@ public class SplitBolt implements IRichBolt {
     public void execute(Tuple tuple) {
         String sentence = tuple.getString(0);
         String[] words = sentence.split(" ");
-        collector.emit(new Values(words[0],words[1],words[2],words[3]));
+        collector.emit(new Values(words[0],words[1],words[2],words[3],words[4]));
         collector.ack(tuple);
 
     }
@@ -37,7 +37,7 @@ public class SplitBolt implements IRichBolt {
 
     @Override
     public void declareOutputFields(OutputFieldsDeclarer outputFieldsDeclarer) {
-        outputFieldsDeclarer.declare(new Fields("articleNr","gender","age","zip"));
+        outputFieldsDeclarer.declare(new Fields("customer","articleNr","gender","age","zip"));
     }
 
     @Override

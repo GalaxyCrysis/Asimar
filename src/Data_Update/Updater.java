@@ -40,7 +40,10 @@ public class Updater {
     private Statement statement;
 
     //get the data from the database saved in a table for sold articles each day
-    //We get informations about the article and the age and gender of the customer
+    //We get the name of the customer and informations about the article and the age and gender of the customer
+    //We already have a trained classifier to predict what customers of this age,gender and zip might buy
+    // so we use the data not just to send the customer recommendations but also for advertisement for other customers
+
     private ArrayList getData(){
         dataSource = new MysqlDataSource();
         dataSource.setDatabaseName(dataBase);
@@ -53,11 +56,11 @@ public class Updater {
             connection = dataSource.getConnection(userID,password);
             statement = connection.createStatement();
             //execute SQL query and get the data
-            ResultSet result = statement.executeQuery("SELECT articleNr,gender,age,zip FROM sold_articles");
+            ResultSet result = statement.executeQuery("SELECT customer,articleNr,gender,age,zip FROM sold_articles");
             //add data to the list
             while (result.next()){
-                String data = result.getString("articleNr") + " " + result.getString("gender") + " " + result.getString("age")
-                        + " " + result.getString("zip");
+                String data = result.getString("customer") + " " + result.getString("articleNr") + " " +
+                        result.getString("gender") + " " + result.getString("age") + " " + result.getString("zip");
                 list.add(data);
             }
             result.close();
