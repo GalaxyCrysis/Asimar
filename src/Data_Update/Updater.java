@@ -32,7 +32,7 @@ public class Updater {
     private final String password = "password";
     private final int port = 3306;
     private final String serverName = "localhost";
-    private final String dataBase = "messenger";
+    private final String dataBase = "Asimar";
 
     //database variables
     private MysqlDataSource dataSource;
@@ -106,6 +106,7 @@ public class Updater {
         URI uri = URI.create("hdfs://localhost:9000/user/dominik/Asimar/data.txt");
         Configuration config = new Configuration();
         FileSystem file = FileSystem.get(uri,config);
+
         //init outputstream
         FSDataOutputStream outputStream;
         if(file.getScheme().equals("file")){
